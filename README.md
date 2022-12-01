@@ -2,7 +2,7 @@
 # Notes on methodlogy:
 
 1. Export the given original data to MySQL tables and create indexes etc.
-2. Create Views and Functions that can server the dashboard and ML model requirements
+2. Create Views and Functions that can serve the dashboard and ML model requirements
 3. Export data from created view to Jupyter Notebook
 4. Preprocessing of data in Pandas; Added columns that give data on courses watched using pandas 
 5. Complete the machine learning models in Jupyter Notebook
