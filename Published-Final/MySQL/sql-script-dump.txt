@@ -1,0 +1,475 @@
+-- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: 365_database
+-- ------------------------------------------------------
+-- Server version	8.0.31
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Temporary view structure for view `365_student_all_features`
+--
+
+DROP TABLE IF EXISTS `365_student_all_features`;
+/*!50001 DROP VIEW IF EXISTS `365_student_all_features`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `365_student_all_features` AS SELECT 
+ 1 AS `student_id`,
+ 1 AS `student_country`,
+ 1 AS `date_registered`,
+ 1 AS `onboard_status`,
+ 1 AS `totaldays_engaged`,
+ 1 AS `totalminwatched`,
+ 1 AS `tendaysafter`,
+ 1 AS `twentydaysafter`,
+ 1 AS `thirtydaysafter`,
+ 1 AS `sixtydaysafter`,
+ 1 AS `subscriptiontype`,
+ 1 AS `conversion`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `365_student_days`
+--
+
+DROP TABLE IF EXISTS `365_student_days`;
+/*!50001 DROP VIEW IF EXISTS `365_student_days`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `365_student_days` AS SELECT 
+ 1 AS `student_id`,
+ 1 AS `daysafteronb`,
+ 1 AS `daysafterpur`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `365_subscription_status`
+--
+
+DROP TABLE IF EXISTS `365_subscription_status`;
+/*!50001 DROP VIEW IF EXISTS `365_subscription_status`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `365_subscription_status` AS SELECT 
+ 1 AS `student_id`,
+ 1 AS `expiry_date`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `student_onboard_status`
+--
+
+DROP TABLE IF EXISTS `student_onboard_status`;
+/*!50001 DROP VIEW IF EXISTS `student_onboard_status`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `student_onboard_status` AS SELECT 
+ 1 AS `student_id`,
+ 1 AS `onboard_status`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping routines for database '365_database'
+--
+/*!50003 DROP FUNCTION IF EXISTS `courseswatched` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `courseswatched`(student_id int) RETURNS int
+    DETERMINISTIC
+BEGIN
+declare c int;
+
+set c=(select count(distinct sl.course_id) as xyz from 365_student_learning sl where sl.student_id=student_id);
+
+ 
+
+RETURN c;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `daysafterob` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `daysafterob`(student_id int) RETURNS int
+    DETERMINISTIC
+BEGIN
+declare obd int;
+
+set obd=datediff((select min(date_engaged) from 365_student_engagement se where se.student_id=student_id),
+(select date_registered from 365_student_info sr where sr.student_id=student_id)
+);
+
+RETURN obd;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `daysafterpur` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `daysafterpur`(student_id int) RETURNS int
+    DETERMINISTIC
+BEGIN
+declare purd int;
+
+set purd=datediff((select min(date_purchased) from 365_student_purchases sp where sp.student_id=student_id),
+(select date_registered from 365_student_info sr where sr.student_id=student_id)
+
+);
+
+RETURN purd;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `daysengaged` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `daysengaged`(student_id int) RETURNS int
+    DETERMINISTIC
+BEGIN
+declare d int;
+
+set d=(select count(*) from 365_student_engagement em where em.student_id=student_id);
+
+RETURN d;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `Expiry_date` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `Expiry_date`(student_id INT) RETURNS date
+    DETERMINISTIC
+BEGIN
+ -- statements	  
+	 DECLARE expirydate, purdate DATE;     
+	 DECLARE purtype TEXT; 
+     DECLARE flag INT;
+     DECLARE finished INTEGER DEFAULT 0;
+     DECLARE purtype1 TEXT;
+     DECLARE purvalue CURSOR FOR SELECT purchase_type 
+     FROM 365_student_purchases sp 
+     WHERE (sp.student_id=student_id AND sp.date_purchased>=purdate);
+     
+     DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1; 
+	 
+     
+     SET flag = (select exists (select * from 365_student_purchases sp
+     WHERE sp.student_id=student_id));
+     
+     IF flag=0 THEN SET expirydate=date_sub(SYSDATE(), INTERVAL 100 YEAR);
+     ELSE     
+	 SET purdate= (SELECT MAX(date_purchased) FROM 365_student_purchases sp 
+	 WHERE sp.student_id=student_id);	
+     
+     OPEN purvalue;	           
+     getpurtype: LOOP
+		FETCH purvalue INTO purtype1;
+        IF finished = 1 THEN 
+			LEAVE getpurtype;
+		END IF;         
+        IF purtype1='Annual' THEN SET purtype = 'Annual';
+        LEAVE getpurtype;         
+        ELSEIF (purtype1='Quarterly') THEN SET purtype = 'Quarterly';
+		ELSEIF (purtype1='Monthly') THEN SET purtype='Monthly';		       
+        END IF; 
+	       
+	 END LOOP getpurtype;
+     CLOSE purvalue; 
+        
+     
+     
+     
+	 
+	 CASE purtype
+		  WHEN 'Monthly' THEN SET expirydate=DATE_ADD(purdate, INTERVAL 30 DAY);
+		  WHEN 'Quarterly' THEN SET expirydate=DATE_ADD(purdate, INTERVAL 90 DAY);
+		  WHEN "Annual" THEN SET expirydate=DATE_ADD(purdate, INTERVAL 365 DAY);
+          ELSE  SET expirydate=date_sub(SYSDATE(), INTERVAL 100 YEAR);
+	 END CASE;
+     END IF;
+     
+RETURN expirydate;
+  
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `min_watched_after` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `min_watched_after`(student_id INT,date_registered DATE,days INT) RETURNS int
+    DETERMINISTIC
+BEGIN
+	DECLARE totmin INT;
+
+	SET totmin= (select sum(minutes_watched) from 365_student_learning sl 
+	right join 365_student_info sr on sl.student_id=sr.student_id 
+	where sl.student_id=student_id
+	and date_watched<=date_add(sr.date_registered,interval days DAY) );
+
+RETURN totmin;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `onboard_status` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `onboard_status`(student_id INT) RETURNS int
+    DETERMINISTIC
+BEGIN
+ -- statements
+ DECLARE stat, st INT;
+ 
+ SET st = (SELECT EXISTS (SELECT * FROM 365_student_info sr INNER JOIN 
+ 365_student_engagement se ON se.student_id=sr.student_id 
+ WHERE sr.student_id=student_id)); 
+ 
+ IF st=0 THEN SET stat=0;
+ ELSE SET stat=1;	
+ END IF;
+ RETURN stat;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `questionsasked` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `questionsasked`(student_id int) RETURNS int
+    DETERMINISTIC
+BEGIN
+declare q int;
+
+set q=(select count(sq.student_id) as nq from 365_student_hub_questions sq where sq.student_id=student_id);
+
+ 
+
+RETURN q;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `subscription_status` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `subscription_status`(student_id INT,expirydate DATE) RETURNS text CHARSET utf8mb4
+    DETERMINISTIC
+BEGIN
+	DECLARE d INT;
+    DECLARE subscription_status TEXT;
+	SET d=DATEDIFF(expirydate, sysdate());
+	IF d>0 THEN SET subscription_status='Paid' ;
+	ELSE SET subscription_status='Free';
+    END IF;
+
+RETURN subscription_status;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `total_minwatched` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`nmuru`@`%` FUNCTION `total_minwatched`(student_id INT) RETURNS int
+    DETERMINISTIC
+BEGIN
+	DECLARE totmin INT;
+
+	SET totmin= (select sum(minutes_watched) from 365_student_learning sl 
+    where sl.student_id=student_id group by sl.student_id);
+    
+
+RETURN totmin;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Final view structure for view `365_student_all_features`
+--
+
+/*!50001 DROP VIEW IF EXISTS `365_student_all_features`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`nmuru`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `365_student_all_features` AS select `sr`.`student_id` AS `student_id`,`sr`.`student_country` AS `student_country`,`sr`.`date_registered` AS `date_registered`,`ob`.`onboard_status` AS `onboard_status`,`DAYSENGAGED`(`sr`.`student_id`) AS `totaldays_engaged`,`TOTAL_MINWATCHED`(`sr`.`student_id`) AS `totalminwatched`,`MIN_WATCHED_AFTER`(`sr`.`student_id`,`sr`.`date_registered`,10) AS `tendaysafter`,`MIN_WATCHED_AFTER`(`sr`.`student_id`,`sr`.`date_registered`,20) AS `twentydaysafter`,`MIN_WATCHED_AFTER`(`sr`.`student_id`,`sr`.`date_registered`,30) AS `thirtydaysafter`,`MIN_WATCHED_AFTER`(`sr`.`student_id`,`sr`.`date_registered`,60) AS `sixtydaysafter`,`sp`.`purchase_type` AS `subscriptiontype`,if((`sp`.`date_purchased` is null),0,1) AS `conversion` from ((`365_student_info` `sr` left join `student_onboard_status` `ob` on((`sr`.`student_id` = `ob`.`student_id`))) left join `365_student_purchases` `sp` on((`sr`.`student_id` = `sp`.`student_id`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `365_student_days`
+--
+
+/*!50001 DROP VIEW IF EXISTS `365_student_days`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`nmuru`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `365_student_days` AS select `sr`.`student_id` AS `student_id`,`daysafterob`(`sr`.`student_id`) AS `daysafteronb`,`daysafterpur`(`sr`.`student_id`) AS `daysafterpur` from (`365_student_info` `sr` left join `365_student_purchases` `sp` on((`sr`.`student_id` = `sp`.`student_id`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `365_subscription_status`
+--
+
+/*!50001 DROP VIEW IF EXISTS `365_subscription_status`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`nmuru`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `365_subscription_status` AS select `365_student_info`.`student_id` AS `student_id`,`EXPIRY_DATE`(`365_student_info`.`student_id`) AS `expiry_date` from `365_student_info` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `student_onboard_status`
+--
+
+/*!50001 DROP VIEW IF EXISTS `student_onboard_status`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=MERGE */
+/*!50013 DEFINER=`nmuru`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `student_onboard_status` AS select `sr`.`student_id` AS `student_id`,`ONBOARD_STATUS`(`sr`.`student_id`) AS `onboard_status` from `365_student_info` `sr` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-12-01 12:25:41
