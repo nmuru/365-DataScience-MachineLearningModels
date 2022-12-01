@@ -1,5 +1,5 @@
 # 365-DataScience-Machine Learning Model & Tableau Dashboard
-# Notes on methodlogy:
+# Notes:
 
 1. Export the given original data to MySQL tables and create indexes etc.
 2. Create Views and Functions that can serve the dashboard and ML model requirements
