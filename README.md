@@ -1,4 +1,5 @@
-# 365-DataScience-MachineLearningModels
+# 365-DataScience-Machine Learning Model & Tableau Dashboard
+# Notes
 
 1. Export the given original data to MySQL tables and create indexes etc.
 2. Create Views and Functions that can server the dashboard and ML model requirements
@@ -17,7 +18,7 @@
 15. deploy the functions to tabpy server
 16. Write python scripts in tableau that queries the above models through tabpy extension
 
-Some restrictions / problems / limitations / insights:
+## Some restrictions / problems / limitations / insights:
 
 1. Tabpy server could not be deployed in Heroku - it looks like Tabpy can not be accessed for remote deployment
 2. There does not seem to be any other free tabpy deployment on the web currently possible
@@ -29,7 +30,4 @@ Some restrictions / problems / limitations / insights:
 8. Imbalance techniques tend to overfit the data. The accuracies for target label went down when imbalance techniques are applied. The overall accuracy and accuracy of majority class label only increases
 9. Tensorflow could not be used to train the accuracy measure for minority label - the focus is to miminize the overall loss objective function. Using GridSearch however allows giving a scoring parameter (like precision) on which performance tuning could be done as against loss function
 10. Autoencoder model gives accuracies that either favour precision or recall. The overall low accuracies given by Autoencoders imply additional data is required in this problem
-
-
-17. 
-18. one final table and few other table
+11. A dashboard should ideally give insights, not just on static processed data, but also on live predictions given by machine learning model. The above dashboard gives a chart that provides predictions for sample test data (this data can also be live connected and filtered)
